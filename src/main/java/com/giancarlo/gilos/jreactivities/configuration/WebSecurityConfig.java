@@ -15,7 +15,7 @@ public class WebSecurityConfig {
 
         http.authorizeHttpRequests((requests) -> 
             requests
-            .requestMatchers("/api/customers")
+            .requestMatchers("/api/activities")
             .permitAll()
             .anyRequest()
             .authenticated());
