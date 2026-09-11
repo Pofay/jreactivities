@@ -85,6 +85,7 @@ class ActivitiesControllerTest {
         .body("data.[0].id", equalTo("50c3d35f-965f-455e-9f2a-39cc822dcec0"))
         .body("data.[1].id", equalTo("e60d1d06-2f80-4931-8585-80e1c23115c0"))
         .body("data", hasSize(2));
+        
   }
 
   @Test
