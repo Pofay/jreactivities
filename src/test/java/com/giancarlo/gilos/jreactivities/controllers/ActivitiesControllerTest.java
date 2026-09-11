@@ -1,6 +1,7 @@
 package com.giancarlo.gilos.jreactivities.controllers;
 
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 
 import java.time.LocalDateTime;
@@ -55,7 +56,7 @@ class ActivitiesControllerTest {
 
   @BeforeEach
   void setUp() {
-    RestAssured.baseURI = "http://localhost:" + port;
+    RestAssured.baseURI = String.format("http://localhost:%d", port);
     activitiesRepository.deleteAll();
   }
 
@@ -82,5 +83,28 @@ class ActivitiesControllerTest {
         .then()
         .statusCode(200)
         .body(".", hasSize(2));
+  }
+
+  @Test
+  public void shouldGetActivityById() {
+    final var pathFormat = "/api/activities/%s";
+    final var activityId = UUID.fromString("e60d1d17-2f80-4931-8585-80e1c23115c0");
+    final var activity = new Activity(
+        activityId, "Convention something",
+        LocalDateTime.now().plusMonths(2), "2 months in future", "meetup", "Cebu City", "SM Seaside");
+
+    activity.reactivateActivity();
+
+    activitiesRepository.save(activity);
+
+    given()
+        .contentType(ContentType.JSON)
+        .when()
+        .get(String.format(pathFormat, activityId))
+        .then()
+        .statusCode(200)
+        .body("id", equalTo(activityId.toString()))
+        .body("title", equalTo("Convention something"))
+        .body("description", equalTo("2 months in future"));
   }
 }

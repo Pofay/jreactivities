@@ -73,6 +73,38 @@ public class Activity {
     this.date = date;
   }
 
+  public String getDescription() {
+    return description;
+  }
+
+  public void setDescription(String description) {
+    this.description = description;
+  }
+
+  public String getCategory() {
+    return category;
+  }
+
+  public void setCategory(String category) {
+    this.category = category;
+  }
+
+  public String getCity() {
+    return city;
+  }
+
+  public void setCity(String city) {
+    this.city = city;
+  }
+
+  public String getVenue() {
+    return venue;
+  }
+
+  public void setVenue(String venue) {
+    this.venue = venue;
+  }
+
   @Override 
   public boolean equals(Object o) {
     if(this == o) return true;
@@ -96,5 +128,13 @@ public class Activity {
 
   public void reactivateActivity() {
     isCancelled = false;
+  }
+
+  public boolean isCancelled() {
+    return isCancelled;
+  }
+
+  public boolean isActive() {
+    return !isCancelled;
   }
 }

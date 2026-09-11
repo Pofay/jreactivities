@@ -17,8 +17,9 @@ public class WebSecurityConfig {
             requests
             .requestMatchers("/api/activities")
             .permitAll()
-            .anyRequest()
-            .authenticated());
+            .requestMatchers("/api/activities/{id}")
+            .permitAll()
+    );
 
         return http.build();
     }
