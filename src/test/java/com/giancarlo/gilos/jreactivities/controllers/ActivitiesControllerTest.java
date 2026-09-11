@@ -82,7 +82,9 @@ class ActivitiesControllerTest {
         .get("/api/activities")
         .then()
         .statusCode(200)
-        .body(".", hasSize(2));
+        .body("data.[0].id", equalTo("50c3d35f-965f-455e-9f2a-39cc822dcec0"))
+        .body("data.[1].id", equalTo("e60d1d06-2f80-4931-8585-80e1c23115c0"))
+        .body("data", hasSize(2));
   }
 
   @Test
@@ -103,8 +105,12 @@ class ActivitiesControllerTest {
         .get(String.format(pathFormat, activityId))
         .then()
         .statusCode(200)
-        .body("id", equalTo(activityId.toString()))
-        .body("title", equalTo("Convention something"))
-        .body("description", equalTo("2 months in future"));
+        .body("data.id", equalTo(activityId.toString()))
+        .body("data.attributes.title", equalTo("Convention something"))
+        .body("data.attributes.description", equalTo("2 months in future"));
+  }
+
+  @Test 
+  public void shouldReturnErrorIfActivityNotFound() {
   }
 }
