@@ -28,6 +28,8 @@ import io.restassured.http.ContentType;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class ActivitiesControllerTest {
 
+  private static final String basePath = "/api/activities";
+
   @LocalServerPort
   private Integer port;
 
@@ -79,19 +81,19 @@ class ActivitiesControllerTest {
     given()
         .contentType(ContentType.JSON)
         .when()
-        .get("/api/activities")
+        .get(basePath)
         .then()
         .statusCode(200)
         .body("data.[0].id", equalTo("50c3d35f-965f-455e-9f2a-39cc822dcec0"))
         .body("data.[1].id", equalTo("e60d1d06-2f80-4931-8585-80e1c23115c0"))
         .body("data", hasSize(2));
-        
+
   }
 
   @Test
   public void shouldGetActivityById() {
-    final var pathFormat = "/api/activities/%s";
     final var activityId = UUID.fromString("e60d1d17-2f80-4931-8585-80e1c23115c0");
+    final var path = String.format("%s/%s", basePath, activityId);
     final var activity = new Activity(
         activityId, "Convention something",
         LocalDateTime.now().plusMonths(2), "2 months in future", "meetup", "Cebu City", "SM Seaside");
@@ -103,7 +105,7 @@ class ActivitiesControllerTest {
     given()
         .contentType(ContentType.JSON)
         .when()
-        .get(String.format(pathFormat, activityId))
+        .get(path)
         .then()
         .statusCode(200)
         .body("data.id", equalTo(activityId.toString()))
@@ -111,7 +113,7 @@ class ActivitiesControllerTest {
         .body("data.attributes.description", equalTo("2 months in future"));
   }
 
-  @Test 
+  @Test
   public void shouldReturnErrorIfActivityNotFound() {
   }
 }
