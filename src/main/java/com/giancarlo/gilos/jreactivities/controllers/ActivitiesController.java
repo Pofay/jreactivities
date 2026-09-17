@@ -9,17 +9,22 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.giancarlo.gilos.jreactivities.DTOs.ActivityDto;
+import com.giancarlo.gilos.jreactivities.DTOs.ErrorContainerDto;
+import com.giancarlo.gilos.jreactivities.DTOs.ErrorDto;
 import com.giancarlo.gilos.jreactivities.repositories.ActivityRepository;
 
 import nl.michelbijnen.jsonapi.parser.JsonApiConverter;
+import tools.jackson.databind.ObjectMapper;
 
 @RestController
 public class ActivitiesController {
 
   private final ActivityRepository repo;
+  private final ObjectMapper objectMapper;
 
-  public ActivitiesController(ActivityRepository repo) {
+  public ActivitiesController(ActivityRepository repo, ObjectMapper objectMapper) {
     this.repo = repo;
+    this.objectMapper = objectMapper;
   }
 
   @GetMapping(value = "/api/activities", produces = "application/vnd.api+json")
@@ -31,11 +36,23 @@ public class ActivitiesController {
 
   @GetMapping(value = "/api/activities/{id}", produces = "application/vnd.api+json")
   public ResponseEntity<String> getById(@PathVariable("id") String id) {
-    return repo.findById(UUID.fromString(id))
-        .map(ActivityDto::fromActivity)
-        .map(JsonApiConverter::convert)
-        .map(ResponseEntity::ok)
-        .orElse(ResponseEntity.notFound().build());
+    final var activity = repo.findById(UUID.fromString(id))
+                             .map(ActivityDto::fromActivity);
+    if(activity.isPresent()) {
+      return ResponseEntity.ok(JsonApiConverter.convert(activity.get()));
+    } else {
+      return notFound(id);
+    }
+  }
+
+  private ResponseEntity<String> notFound(String id) {
+    final var errorDto = ErrorContainerDto.wrap(
+        new ErrorDto("404", "id", String.format("Activity with id: %s not found", id))
+    );
+
+    final var response = objectMapper.writeValueAsString(errorDto);
+
+    return ResponseEntity.status(404).body(response);
   }
 
 }

@@ -115,5 +115,17 @@ class ActivitiesControllerTest {
 
   @Test
   public void shouldReturnErrorIfActivityNotFound() {
+    final var nonexistentId = UUID.fromString("00000000-0000-0000-0000-000000000000");
+    final var path = String.format("%s/%s", basePath, nonexistentId);
+
+    final var value = given()
+        .contentType(ContentType.JSON)
+        .when()
+        .get(path)
+        .then()
+        .statusCode(404)
+        .body("errors[0].status", equalTo("404"))
+        .body("errors[0].source", equalTo("/data/attributes/id"))
+        .body("errors[0].message", equalTo("Activity with id: 00000000-0000-0000-0000-000000000000 not found"));
   }
 }
