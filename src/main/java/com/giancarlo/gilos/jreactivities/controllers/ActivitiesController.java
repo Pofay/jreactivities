@@ -37,8 +37,8 @@ public class ActivitiesController {
   @GetMapping(value = "/api/activities/{id}", produces = "application/vnd.api+json")
   public ResponseEntity<String> getById(@PathVariable("id") String id) {
     final var activity = repo.findById(UUID.fromString(id))
-                             .map(ActivityDto::fromActivity);
-    if(activity.isPresent()) {
+        .map(ActivityDto::fromActivity);
+    if (activity.isPresent()) {
       return ResponseEntity.ok(JsonApiConverter.convert(activity.get()));
     } else {
       return notFound(id);
@@ -47,8 +47,7 @@ public class ActivitiesController {
 
   private ResponseEntity<String> notFound(String id) {
     final var errorDto = ErrorContainerDto.wrap(
-        new ErrorDto("404", "id", String.format("Activity with id: %s not found", id))
-    );
+        new ErrorDto("404", "id", String.format("Activity with id: %s not found", id)));
 
     final var response = objectMapper.writeValueAsString(errorDto);
 

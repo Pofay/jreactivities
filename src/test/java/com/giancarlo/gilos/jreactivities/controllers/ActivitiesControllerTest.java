@@ -118,7 +118,7 @@ class ActivitiesControllerTest {
     final var nonexistentId = UUID.fromString("00000000-0000-0000-0000-000000000000");
     final var path = String.format("%s/%s", basePath, nonexistentId);
 
-    final var value = given()
+    given()
         .contentType(ContentType.JSON)
         .when()
         .get(path)
