@@ -20,11 +20,9 @@ import tools.jackson.databind.ObjectMapper;
 public class ActivitiesController {
 
   private final ActivityRepository repo;
-  private final ObjectMapper objectMapper;
 
-  public ActivitiesController(ActivityRepository repo, ObjectMapper objectMapper) {
+  public ActivitiesController(ActivityRepository repo) {
     this.repo = repo;
-    this.objectMapper = objectMapper;
   }
 
   @GetMapping(value = "/api/activities", produces = "application/vnd.api+json")
@@ -35,7 +33,7 @@ public class ActivitiesController {
   }
 
   @GetMapping(value = "/api/activities/{id}", produces = "application/vnd.api+json")
-  public ResponseEntity<String> getById(@PathVariable("id") String id) {
+  public ResponseEntity<?> getById(@PathVariable("id") String id) {
     final var activity = repo.findById(UUID.fromString(id))
         .map(ActivityDto::fromActivity);
     if (activity.isPresent()) {
@@ -45,13 +43,11 @@ public class ActivitiesController {
     }
   }
 
-  private ResponseEntity<String> notFound(String id) {
+  private ResponseEntity<?> notFound(String id) {
     final var errorDto = ErrorContainerDto.wrap(
-        new ErrorDto("404", "id", String.format("Activity with id: %s not found", id)));
+        new ErrorDto("404", "Activity not found", "id", String.format("Activity with id: %s not found", id)));
 
-    final var response = objectMapper.writeValueAsString(errorDto);
-
-    return ResponseEntity.status(404).body(response);
+    return ResponseEntity.status(404).body(errorDto);
   }
 
 }

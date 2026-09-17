@@ -126,6 +126,7 @@ class ActivitiesControllerTest {
         .statusCode(404)
         .body("errors[0].status", equalTo("404"))
         .body("errors[0].source", equalTo("/data/attributes/id"))
-        .body("errors[0].message", equalTo("Activity with id: 00000000-0000-0000-0000-000000000000 not found"));
+        .body("errors[0].title", equalTo("Activity not found"))
+        .body("errors[0].detail", equalTo("Activity with id: 00000000-0000-0000-0000-000000000000 not found"));
   }
 }

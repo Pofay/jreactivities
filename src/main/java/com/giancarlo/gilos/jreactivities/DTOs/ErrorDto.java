@@ -3,13 +3,16 @@ package com.giancarlo.gilos.jreactivities.DTOs;
 public class ErrorDto {
 
     private String status;
-    private String source;
-    private String message;
+    private String title;
 
-    public ErrorDto(String status, String source, String message) {
+    private String source;
+    private String detail;
+
+    public ErrorDto(String status, String title, String source, String detail) {
         this.status = status;
+        this.title = title;
         this.source = String.format("/data/attributes/%s", source);
-        this.message = message;
+        this.detail = detail;
     }
 
     public String getStatus() {
@@ -20,17 +23,22 @@ public class ErrorDto {
         return source;
     }
 
-    public String getMessage() {
-        return message;
+    public String getDetail() {
+        return detail;
     }
 
-    @Override 
+    public String getTitle() {
+        return title;
+    }
+
+    @Override
     public String toString() {
         return "{" +
-               "\"status\":\"" + status + "\"," +
-               "\"source\":\"" + source + "\"," +
-               "\"message\":\"" + message + "\"" +
-               "}";
+                "\"status\":\"" + status + "\"," +
+                "\"title\":\"" + title + "\"," +
+                "\"source\":\"" + source + "\"," +
+                "\"detail\":\"" + detail + "\"" +
+                "}";
     }
 
 }
