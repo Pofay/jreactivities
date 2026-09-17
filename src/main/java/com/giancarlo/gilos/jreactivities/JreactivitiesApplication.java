@@ -8,6 +8,8 @@ public class JreactivitiesApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(JreactivitiesApplication.class, args);
+
+		
 	}
 
 }

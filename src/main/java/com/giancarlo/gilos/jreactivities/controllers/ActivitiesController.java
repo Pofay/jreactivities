@@ -1,6 +1,5 @@
 package com.giancarlo.gilos.jreactivities.controllers;
 
-import java.util.List;
 import java.util.UUID;
 
 import org.springframework.http.ResponseEntity;
@@ -14,7 +13,6 @@ import com.giancarlo.gilos.jreactivities.DTOs.ErrorDto;
 import com.giancarlo.gilos.jreactivities.repositories.ActivityRepository;
 
 import nl.michelbijnen.jsonapi.parser.JsonApiConverter;
-import tools.jackson.databind.ObjectMapper;
 
 @RestController
 public class ActivitiesController {
